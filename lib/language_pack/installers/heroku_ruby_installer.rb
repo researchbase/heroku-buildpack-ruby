@@ -19,6 +19,7 @@ class LanguagePack::Installers::HerokuRubyInstaller
         ruby_vm = "ruby"
         file.sub!(ruby_vm, "#{ruby_vm}-build")
       end
+      puts "Fetching #{file}"
       @fetcher.fetch_untar(file)
     end
   end
