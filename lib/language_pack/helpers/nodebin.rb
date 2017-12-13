@@ -14,7 +14,7 @@ class LanguagePack::Helpers::Nodebin
     version = "6.11.1"
     {
       "number" => version,
-      "url"    => "https://s3pository.heroku.com/node/v#{version}/node-v#{version}-linux-x64.tar.gz"
+      "url"    => "https://storage.googleapis.com/rp-heroku-buildpack-ruby/node/v#{version}/node-v#{version}-linux-x64.tar.gz"
     }
   end
 
