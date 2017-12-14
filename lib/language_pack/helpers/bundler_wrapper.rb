@@ -12,7 +12,7 @@ class LanguagePack::Helpers::BundlerWrapper
   end
 
   VENDOR_URL         = LanguagePack::Base::VENDOR_URL                # coupling
-  DEFAULT_FETCHER    = LanguagePack::Fetcher.new(VENDOR_URL)         # coupling
+  DEFAULT_FETCHER    = LanguagePack::Fetcher.new(VENDOR_URL, DEFAULT_STACK) # coupling
   BUNDLER_DIR_NAME   = LanguagePack::Ruby::BUNDLER_GEM_PATH          # coupling
   BUNDLER_PATH       = File.expand_path("../../../../tmp/#{BUNDLER_DIR_NAME}", __FILE__)
   GEMFILE_PATH       = Pathname.new "./Gemfile"
