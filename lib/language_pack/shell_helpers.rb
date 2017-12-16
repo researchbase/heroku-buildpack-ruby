@@ -76,7 +76,7 @@ module LanguagePack
     # @option options [Boolean] :user_env whether or not a user's environment variables will be loaded
     def run(command, options = {})
       full_command = command_options_to_string(command, options)
-      puts full_command
+      # puts full_command
       %x{ #{full_command} }
     end
 
