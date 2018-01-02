@@ -1,6 +1,14 @@
 ## Master
 
+## v173 (12/22/2017)
+
+* Remove Bundler shim since Bundler 2.5.0 will not vendor Bundler (#645)
+
+## v172 (12/22/2017)
+
+* updated Ruby 2.5.0 support + Bundler shim (#640)
 * Disable bundler version check (#632)
+* set JAVA_HOME to absolute path during `bundle install` (#631)
 
 ## v170 (10/19/2017)
 
