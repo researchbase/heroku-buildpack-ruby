@@ -3,6 +3,7 @@ require "tmpdir"
 require 'hatchet/tasks'
 
 S3_BUCKET_NAME  = "heroku-buildpack-ruby"
+GCS_BUCKET_NAME = "rp-heroku-buildpack-ruby"
 VENDOR_URL      = "https://s3.amazonaws.com/#{S3_BUCKET_NAME}"
 
 def s3_tools_dir
@@ -11,6 +12,10 @@ end
 
 def s3_upload(tmpdir, name)
   sh("#{s3_tools_dir}/s3 put #{S3_BUCKET_NAME} #{name}.tgz #{tmpdir}/#{name}.tgz")
+end
+
+def gcs_upload(tmpdir, name)
+  sh("gsutil cp #{name}.tgz #{tmpdir}/#{name}.tgz gs://#{GCS_BUCKET_NAME}")
 end
 
 def vendor_plugin(git_url, branch = nil)
@@ -23,7 +28,7 @@ def vendor_plugin(git_url, branch = nil)
       sh "git checkout origin/#{branch}" if branch
       FileUtils.rm_rf("#{name}/.git")
       sh("tar czvf #{tmpdir}/#{name}.tgz *")
-      s3_upload(tmpdir, name)
+      gcs_upload(tmpdir, name)
     end
   end
 end
