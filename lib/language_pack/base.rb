@@ -34,8 +34,6 @@ class LanguagePack::Base
       @metadata      = LanguagePack::Metadata.new(@cache)
       @bundler_cache = LanguagePack::BundlerCache.new(@cache, @stack)
       @id            = Digest::SHA1.hexdigest("#{Time.now.to_f}-#{rand(1000000)}")[0..10]
-      @warnings      = []
-      @deprecations  = []
       @fetchers      = {:buildpack => LanguagePack::Fetcher.new(VENDOR_URL) }
 
       Dir.chdir build_path
@@ -84,12 +82,12 @@ class LanguagePack::Base
     write_release_yaml
     instrument 'base.compile' do
       Kernel.puts ""
-      @warnings.each do |warning|
-        Kernel.puts "###### WARNING:"
+      warnings.each do |warning|
+        Kernel.puts "###### WARNING:\n"
         puts warning
         Kernel.puts ""
       end
-      if @deprecations.any?
+      if deprecations.any?
         topic "DEPRECATIONS:"
         puts @deprecations.join("\n")
       end
@@ -136,8 +134,9 @@ class LanguagePack::Base
         log_internal args, :status => "complete", :finish => finish, :elapsed => (finish - start)
         return ret
       rescue StandardError => ex
-        finish = Time.now.to_f
-        log_internal args, :status => "error", :finish => finish, :elapsed => (finish - start), :message => ex.message
+        finish  = Time.now.to_f
+        message = Shellwords.escape(ex.message)
+        log_internal args, :status => "error", :finish => finish, :elapsed => (finish - start), :message => message
         raise ex
       end
     end
