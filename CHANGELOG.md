@@ -1,5 +1,17 @@
 ## Master
 
+## v190 (unreleased)
+
+* Warn when `config.action_dispatch.x_sendfile_header` is set but apache and nginx are not being used (https://github.com/heroku/heroku-buildpack-ruby/pull/795)
+
+## v190 (7/24/2018)
+
+* Support TAP output for Heroku CI (https://github.com/heroku/heroku-buildpack-ruby/pull/790).
+
+## v189 (7/10/2018)
+
+* Colorize build failures and warnings. (https://github.com/heroku/heroku-buildpack-ruby/pull/788)
+
 ## v188 (6/26/2018)
 
 * Fix rails config detect timeout. Addreses the process deadlock when detecting rails config that contains an infinite task. This was originally addressed in #770 but the implementation did not handle all cases. (#781)

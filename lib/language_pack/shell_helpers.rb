@@ -62,6 +62,22 @@ module LanguagePack
       end
     end
 
+    # Should only be used once in the top level script
+    # for example $ bin/support/ruby_compile
+    def self.display_error_and_exit(e)
+      Kernel.puts "\e[1m\e[31m" # Bold Red
+      Kernel.puts " !"
+      e.message.split("\n").each do |line|
+        Kernel.puts " !     #{line.strip}"
+      end
+      Kernel.puts " !\e[0m"
+      if e.is_a?(BuildpackError)
+        exit 1
+      else
+        raise e
+      end
+    end
+
     # run a shell command (deferring to #run), and raise an error if it fails
     # @param [String] command to be run
     # @return [String] result of #run
@@ -202,11 +218,13 @@ module LanguagePack
     def pipe(command, options = {})
       output = options[:buffer] || ""
       silent = options[:silent]
+      # self.puts uses the method defined in this file
+      output_object = options[:output_object] || self
       IO.popen(command_options_to_string(command, options)) do |io|
         until io.eof?
           buffer = io.gets
           output << buffer
-          puts buffer unless silent
+          output_object.puts(buffer) unless silent
         end
       end
 
@@ -245,7 +263,9 @@ module LanguagePack
 
     def warn(message, options = {})
       if options.key?(:inline) ? options[:inline] : false
-        Kernel.puts "###### WARNING:"
+        Kernel.puts ""
+        Kernel.puts "\e[1m\e[33m###### WARNING:\e[0m" # Bold yellow
+        Kernel.puts ""
         puts message
         Kernel.puts ""
       end
