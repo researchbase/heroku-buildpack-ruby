@@ -110,8 +110,12 @@ WARNING
       end
       config_detect
       best_practice_warnings
+      cleanup
       super
     end
+  end
+
+  def cleanup
   end
 
   def config_detect
@@ -734,7 +738,15 @@ https://devcenter.heroku.com/articles/sqlite3
             error_message += <<-ERROR
 
 Detected a mismatch between your Ruby version installed and
-Ruby version specified in Gemfile or Gemfile.lock:
+Ruby version specified in Gemfile or Gemfile.lock. You can
+correct this by running:
+
+    $ bundle update --ruby
+    $ git add Gemfile.lock
+    $ git commit -m "update ruby version"
+
+If this does not solve the issue please see this documentation:
+
 https://devcenter.heroku.com/articles/ruby-versions#your-ruby-version-is-x-but-your-gemfile-specified-y
             ERROR
           end

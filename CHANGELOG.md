@@ -1,5 +1,15 @@
 ## Master
 
+## v196 (10/31/2018)
+
+* Delete the sprockets temp directory for a smaller runtime slug if they are not building assets at runtime (https://github.com/heroku/heroku-buildpack-ruby/pull/812)
+
+## v195 (10/18/2018)
+
+* Default Ruby version is now 2.4.5 (https://github.com/heroku/heroku-buildpack-ruby/pull/821)
+
+## v194 (10/16/2018)
+
 * Do not add the `jobs:work` command if an app does not have that rake task available (https://github.com/heroku/heroku-buildpack-ruby/pull/810)
 
 ## v193 (9/14/2018)
