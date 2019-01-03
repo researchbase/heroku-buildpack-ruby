@@ -191,7 +191,6 @@ FILE
 
   def github_remote
     @github_remote ||= git.remotes.detect {|remote| remote.url.match(%r{heroku/heroku-buildpack-ruby.git$}) }
-
   end
 
   def git_push_master
