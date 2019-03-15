@@ -92,6 +92,11 @@ task "ruby:manifest" do
   end
 end
 
+desc "download Heroku-18 ruby build"
+task "ruby:download" do
+  sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/heroku-18/ruby-#{ENV['VERSION']}.tgz")
+end
+
 namespace :buildpack do
   require 'netrc'
   require 'excon'
