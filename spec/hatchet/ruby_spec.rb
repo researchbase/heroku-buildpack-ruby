@@ -1,6 +1,24 @@
 require_relative '../spec_helper'
 
 describe "Ruby apps" do
+  describe "vendoring libpq" do
+    it "works on heroku-16" do
+      skip "Blocked on getting heroku-16 docker example to work https://github.com/schneems/libpq_heroku_16_reproduction/tree/schneems/manually-download-install"
+
+      Hatchet::Runner.new("libpq_connection_error", stack: "heroku-16").deploy do |app|
+        out = app.run("ruby reproduce_error.rb")
+        expect(out).to match(%Q{invalid integer value "15s"})
+      end
+    end
+
+    it "works on heroku-18" do
+      Hatchet::Runner.new("libpq_connection_error", stack: "heroku-18").deploy do |app|
+        out = app.run("ruby reproduce_error.rb")
+        expect(out).to match(%Q{invalid integer value "15s"})
+      end
+    end
+  end
+
   describe "running Ruby from outside the default dir" do
     it "works" do
       Hatchet::Runner.new('cd_ruby', stack: DEFAULT_STACK).deploy do |app|
@@ -26,8 +44,8 @@ describe "Ruby apps" do
 
   describe "2.5.0" do
     it "works" do
-      Hatchet::Runner.new("ruby_25").deploy do
-        # works
+      Hatchet::Runner.new("ruby_25").deploy do |app|
+        expect(app.output).to include("There is a more recent Ruby version available")
       end
     end
   end
@@ -89,7 +107,8 @@ end
 
 describe "Raise errors on specific gems" do
   it "should should raise on sqlite3" do
-    Hatchet::Runner.new("sqlite3_gemfile", allow_failure: true).deploy do |app|
+    before_deploy = -> { run!(%Q{echo "ruby '2.5.4' >> Gemfile"}) }
+    Hatchet::Runner.new("sqlite3_gemfile", allow_failure: true, before_deploy: before_deploy).deploy do |app|
       expect(app).not_to be_deployed
       expect(app.output).to include("Detected sqlite3 gem which is not supported")
       expect(app.output).to include("devcenter.heroku.com/articles/sqlite3")
