@@ -1,25 +1,6 @@
 require_relative '../spec_helper'
 
 describe "Ruby apps" do
-  describe "vendoring libpq" do
-    it "works on heroku-16" do
-      skip "Blocked on getting heroku-16 docker example to work https://github.com/schneems/libpq_heroku_16_reproduction/tree/schneems/manually-download-install"
-
-      Hatchet::Runner.new("libpq_connection_error", stack: "heroku-16").deploy do |app|
-        out = app.run("ruby reproduce_error.rb")
-        expect(out).to match(%Q{invalid integer value "15s"})
-      end
-    end
-
-    it "works on heroku-18" do
-      Hatchet::Runner.new("libpq_connection_error", stack: "heroku-18").deploy do |app|
-        out = app.run("ruby reproduce_error.rb")
-        expect(out).to match(%Q{invalid integer value "15s"})
-      end
-    end
-  end
-
-
   describe "bad ruby version" do
     it "gives a helpful error" do
       Hatchet::Runner.new('ruby_version_does_not_exist', allow_failure: true, stack: DEFAULT_STACK).deploy do |app|
@@ -30,7 +11,11 @@ describe "Ruby apps" do
 
   describe "running Ruby from outside the default dir" do
     it "works" do
-      Hatchet::Runner.new('cd_ruby', stack: DEFAULT_STACK).deploy do |app|
+      buildpacks = [
+        :default,
+        "https://github.com/sharpstone/force_absolute_paths_buildpack"
+      ]
+      Hatchet::Runner.new('cd_ruby', stack: DEFAULT_STACK, buildpacks: buildpacks).deploy do |app|
         expect(app.output).to match("cd version ruby 2.5.1")
 
         expect(app.run("which ruby").chomp).to eq("/app/bin/ruby")
@@ -61,32 +46,7 @@ describe "Ruby apps" do
     end
   end
 
-  # describe "default WEB_CONCURRENCY" do
-  #   it "auto scales WEB_CONCURRENCY" do
-  #     pending("https://github.com/heroku/api/issues/4426")
-  #     app = Hatchet::Runner.new("default_ruby")
-  #     app.setup!
-  #     app.set_config("SENSIBLE_DEFAULTS" => "enabled")
-  #     app.deploy do |app|
-  #       app.run('echo "loaded"')
-  #       expect(app.run(:bash, 'echo "value: $WEB_CONCURRENCY"', heroku: { size: "1X" } )).to match("value: 2")
-  #       expect(app.run(:bash, 'echo "value: $WEB_CONCURRENCY"', heroku: { size: "2X" } )).to match("value: 4")
-  #       expect(app.run(:bash, 'echo "value: $WEB_CONCURRENCY"', heroku: { size: "PX" } )).to match("value: 16")
-  #     end
-  #   end
-  # end
-
   describe "Rake detection" do
-    context "default" do
-      # it "adds default process types" do
-      #   Hatchet::Runner.new('empty-procfile').deploy do |app|
-      #     app.run("console") do |console|
-      #       console.run("puts 'hello' + 'world'") {|result| expect(result).to match('helloworld')}
-      #     end
-      #   end
-      # end
-    end
-
     context "Ruby 1.9+" do
       it "runs a rake task if the gem exists" do
         Hatchet::Runner.new('default_with_rakefile').deploy do |app, heroku|
@@ -118,7 +78,7 @@ describe "Ruby apps" do
 end
 
 describe "Raise errors on specific gems" do
-  it "should should raise on sqlite3" do
+  it "should raise on sqlite3" do
     before_deploy = -> { run!(%Q{echo "ruby '2.5.4' >> Gemfile"}) }
     Hatchet::Runner.new("sqlite3_gemfile", allow_failure: true, before_deploy: before_deploy).deploy do |app|
       expect(app).not_to be_deployed
@@ -127,8 +87,6 @@ describe "Raise errors on specific gems" do
     end
   end
 end
-
-
 
 describe "No Lockfile" do
   it "should not deploy" do

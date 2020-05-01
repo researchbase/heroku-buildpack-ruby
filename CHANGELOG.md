@@ -1,5 +1,8 @@
 ## Master (unreleased)
 
+* Default node version now 12.16.2, yarn is 1.22.4 (https://github.com/heroku/heroku-buildpack-ruby/pull/986)
+* Gracefully handle unrecognised stacks ([#982](https://github.com/heroku/heroku-buildpack-ruby/pull/982))
+
 ## v215 (4/9/2020)
 
 * Fix bundler cache not being used in CI builds (https://github.com/heroku/heroku-buildpack-ruby/pull/978)
