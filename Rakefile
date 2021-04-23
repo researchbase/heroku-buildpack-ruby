@@ -60,11 +60,11 @@ def install_gem(gem_name, version)
       FileUtils.rm_rf("#{tmpdir}/*")
 
       in_gem_env(tmpdir) do
-        sh("unset RUBYOPT; gem install #{gem_name} --version #{version} --no-ri --no-rdoc --env-shebang")
+        sh("unset RUBYOPT; gem install #{gem_name} --version #{version} --no-document --env-shebang")
         sh("rm #{gem_name}-#{version}.gem")
         sh("rm -rf cache/#{gem_name}-#{version}.gem")
         sh("tar czvf #{tmpdir}/#{name}.tgz *")
-        s3_upload(tmpdir, name)
+        sh("cp #{tmpdir}/#{name}.tgz #{File.dirname(__FILE__)}")
       end
     end
   end
@@ -127,9 +127,10 @@ task "ruby:manifest" do
   end
 end
 
-desc "download Heroku-18 ruby build"
+desc "Download Ruby build for STACK and VERSION (e.g. heroku-18, 2.6.7)"
 task "ruby:download" do
-  sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/heroku-18/ruby-#{ENV['VERSION']}.tgz")
+  stack = ENV.fetch('STACK', 'heroku-18')
+  sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/#{stack}/ruby-#{ENV['VERSION']}.tgz")
 end
 
 begin
