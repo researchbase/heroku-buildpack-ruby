@@ -30,12 +30,6 @@ class LanguagePack::Rails4 < LanguagePack::Rails3
     end
   end
 
-  def build_bundler(default_bundle_without)
-    instrument "rails4.build_bundler" do
-      super
-    end
-  end
-
   def compile
     instrument "rails4.compile" do
       super
@@ -72,7 +66,7 @@ class LanguagePack::Rails4 < LanguagePack::Rails3
         end
 
         precompile = rake.task("assets:precompile")
-        return true unless precompile.is_defined?
+        return true if precompile.not_defined?
 
         topic("Preparing app for Rails asset pipeline")
 
@@ -85,12 +79,15 @@ class LanguagePack::Rails4 < LanguagePack::Rails3
           log "assets_precompile", :status => "success"
           puts "Asset precompilation completed (#{"%.2f" % precompile.time}s)"
 
-          puts "Cleaning assets"
-          rake.task("assets:clean").invoke(env: rake_env)
+          clean_task = rake.task("assets:clean")
+          if clean_task.task_defined?
+            puts "Cleaning assets"
+            clean_task.invoke(env: rake_env)
 
-          cleanup_assets_cache
-          @cache.store public_assets_folder
-          @cache.store default_assets_cache
+            cleanup_assets_cache
+            @cache.store public_assets_folder
+            @cache.store default_assets_cache
+          end
         else
           precompile_fail(precompile.output)
         end
