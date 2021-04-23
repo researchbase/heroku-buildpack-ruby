@@ -127,10 +127,22 @@ task "ruby:manifest" do
   end
 end
 
-desc "Download Ruby build for STACK and VERSION (e.g. heroku-18, 2.6.7)"
-task "ruby:download" do
-  stack = ENV.fetch('STACK', 'heroku-18')
-  sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/#{stack}/ruby-#{ENV['VERSION']}.tgz")
+namespace :download do
+  desc "Download Ruby build for STACK and VERSION (e.g. heroku-18, 2.6.7)"
+  task :ruby do
+    stack = ENV.fetch('STACK', 'heroku-18')
+    sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/#{stack}/ruby-#{ENV['VERSION']}.tgz")
+  end
+
+  desc "Download Node default version"
+  task :node do
+    sh("wget #{LanguagePack::Helpers::Nodebin.node_lts['url']}")
+  end
+
+  desc "Download Yarn default version"
+  task :yarn do
+    sh("wget #{LanguagePack::Helpers::Nodebin.yarn['url']}")
+  end
 end
 
 begin
