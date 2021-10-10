@@ -9,3 +9,4 @@ buildpacks/*
 tmp/*.log
 TAGS
 log/*.log
+spec/examples.txt
