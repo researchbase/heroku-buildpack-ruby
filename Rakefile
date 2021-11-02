@@ -128,20 +128,22 @@ task "ruby:manifest" do
 end
 
 namespace :download do
-  desc "Download Ruby build for STACK and VERSION (e.g. heroku-18, 2.6.7)"
+  desc "Download Ruby build from Heroku S3 for STACK and VERSION (e.g. STACK=heroku-18, VERSION=2.6.8)"
   task :ruby do
     stack = ENV.fetch('STACK', 'heroku-18')
     sh("wget https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/#{stack}/ruby-#{ENV['VERSION']}.tgz")
   end
 
-  desc "Download Node default version"
+  desc "Download Node default version from Heroku S3"
   task :node do
-    sh("wget #{LanguagePack::Helpers::Nodebin.node_lts['url']}")
+    version = LanguagePack::Helpers::Nodebin.node_lts['number'] 
+    sh("wget https://s3.amazonaws.com/heroku-nodebin/node/release/linux-x64/node-v#{version}-linux-x64.tar.gz")
   end
 
-  desc "Download Yarn default version"
+  desc "Download Yarn default version from Heroku S3"
   task :yarn do
-    sh("wget #{LanguagePack::Helpers::Nodebin.yarn['url']}")
+    version = LanguagePack::Helpers::Nodebin.yarn['number']
+    sh("wget https://s3.amazonaws.com/heroku-nodebin/yarn/release/yarn-v#{version}.tar.gz")
   end
 end
 
