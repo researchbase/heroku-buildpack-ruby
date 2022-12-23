@@ -11,6 +11,7 @@ ENV["BUILDPACK_LOG_FILE"] ||= "tmp/buildpack.log"
 require_relative 'lib/rake/deploy_check'
 require_relative 'lib/rake/tarballer'
 
+S3_BUCKET_REGION = "us-east-1"
 S3_BUCKET_NAME  = "heroku-buildpack-ruby"
 GCS_BUCKET_NAME = "rp-heroku-buildpack-ruby"
 VENDOR_URL      = "https://s3.amazonaws.com/#{S3_BUCKET_NAME}"
@@ -154,7 +155,7 @@ task "ruby:manifest" do
   require 'rexml/document'
   require 'yaml'
 
-  document = REXML::Document.new(`curl https://#{S3_BUCKET_NAME}.s3.amazonaws.com`)
+  document = REXML::Document.new(`curl https://#{S3_BUCKET_NAME}.s3.#{S3_BUCKET_REGION}.amazonaws.com`)
   rubies   = document.elements.to_a("//Contents/Key").map {|node| node.text }.select {|text| text.match(/^(ruby|rbx|jruby)-\\\\d+\\\\.\\\\d+\\\\.\\\\d+(-p\\\\d+)?/) }
 
   Dir.mktmpdir("ruby_versions-") do |tmpdir|
