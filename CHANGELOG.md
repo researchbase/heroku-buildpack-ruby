@@ -2,6 +2,19 @@
 
 ## Main (unreleased)
 
+## v252 (2023/02/08)
+
+* Ruby 3.2.1 is now available
+* JRuby 9.4.1.0 is now available
+
+## v251 (2023/02/03)
+
+* Jruby 9.3.10.0 is available
+
+## v250 (2022/12/25)
+
+* Ruby 3.2.0 is available
+
 ## v249 (2022/12/16)
 
 * Apps with the environment variable `HEROKU_SKIP_DATABASE_PROVISION=1` set will no longer receive a database on the first push to a new Heroku app. This environment variable interface is not standard across other buildpacks and may be deprecated via warnings in the build output and changed in the future.
