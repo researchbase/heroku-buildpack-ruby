@@ -7,26 +7,26 @@ GEM
     dead_end (4.0.0)
     diff-lcs (1.5.0)
     erubis (2.7.0)
-    excon (0.94.0)
+    excon (0.99.0)
     heroics (0.1.2)
       erubis (~> 2.0)
       excon
       moneta
       multi_json (>= 1.9.2)
       webrick
-    heroku_hatchet (7.3.4)
+    heroku_hatchet (8.0.2)
       excon (~> 0)
       platform-api (~> 3)
       rrrretry (~> 1)
       thor (~> 1)
       threaded (~> 0)
-    json (2.6.2)
+    json (2.6.3)
     moneta (1.0.0)
     multi_json (1.15.0)
     parallel (1.22.1)
     parallel_tests (4.0.0)
       parallel
-    platform-api (3.3.0)
+    platform-api (3.5.0)
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
@@ -37,9 +37,9 @@ GEM
     redis-client (0.11.1)
       connection_pool
     rrrretry (1.0.0)
-    rspec-core (3.12.0)
+    rspec-core (3.12.1)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.0)
+    rspec-expectations (3.12.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-retry (0.6.2)
@@ -49,7 +49,7 @@ GEM
     threaded (0.0.4)
     toml-rb (2.2.0)
       citrus (~> 3.0, > 3.0)
-    webrick (1.7.0)
+    webrick (1.8.1)
 
 PLATFORMS
   ruby
