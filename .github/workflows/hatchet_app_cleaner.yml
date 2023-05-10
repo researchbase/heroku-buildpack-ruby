@@ -1,9 +1,6 @@
 name: Hatchet app cleaner
 
 on:
-  schedule:
-    # Daily at 6am UTC.
-    - cron: "0 6 * * *"
   # Allow the workflow to be manually triggered too.
   workflow_dispatch:
 
